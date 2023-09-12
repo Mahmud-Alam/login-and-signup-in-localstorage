@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const [inpVal, setInpVal] = useState({
     username: "",
     name: "",
@@ -20,10 +22,15 @@ const SignUp = () => {
     });
   };
 
-  const [userArr, setUserArr] = useState([]);
-
   const hasStorageData = () => {
     return localStorage.getItem("userRegistration") != null ? true : false;
+  };
+
+  const userExist = (arr, val, i) => {
+    for (let obj of arr) {
+      if (obj[i] === val) return true;
+    }
+    return false;
   };
 
   const setStorageData = (e) => {
@@ -37,16 +44,31 @@ const SignUp = () => {
     else if (password === "") alert("Password is required!");
     else {
       if (hasStorageData()) {
-        const storageDate = JSON.parse(localStorage.getItem("userRegistration")
+        const storageDate = JSON.parse(
+          localStorage.getItem("userRegistration")
         );
-        for(let i of storageDate){
+        console.log(userExist(storageDate, username, "username"));
+        console.log(userExist(storageDate, email, "email"));
+        if (userExist(storageDate, username, "username"))
+          alert("This username is not available!\nPlease try another one!");
+        else if (userExist(storageDate, email, "email"))
+          alert(
+            "This email is already registered!\nPlease Login in your account!"
+          );
+        else {
+          const userArr = [];
+          for (let i of storageDate) {
             userArr.push(i);
+          }
+          userArr.push(inpVal);
+          localStorage.setItem("userRegistration", JSON.stringify(userArr));
+          alert("Congratulations!\nSign Up successfully!\nPlease login!");
+          navigate("/")
         }
-        userArr.push(inpVal);
-        localStorage.setItem("userRegistration", JSON.stringify(userArr));
       } else {
-        userArr.push(inpVal);
-        localStorage.setItem("userRegistration", JSON.stringify(userArr));
+        localStorage.setItem("userRegistration", JSON.stringify([inpVal]));
+        alert("Congratulations!\nSign Up successfully!\nPlease login!");
+        navigate("/")
       }
     }
   };
