@@ -45,8 +45,9 @@ const Login = () => {
         const userObj = userExist(storageData, email, "email");
         if (userObj) {
           if (userObj["password"] === password) {
+            localStorage.setItem("userLogin",JSON.stringify([userObj]))
             alert(`"${userObj['name']}" successfully logged in!`);
-            // navigate("/");
+            navigate("/dashboard");
           }else alert("Password is incorrect!\nPlease try again!");
         } else 
           alert("Email is incorrect!\nPlease try again!");
