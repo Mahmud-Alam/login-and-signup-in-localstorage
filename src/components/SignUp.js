@@ -44,20 +44,18 @@ const SignUp = () => {
     else if (password === "") alert("Password is required!");
     else {
       if (hasStorageData()) {
-        const storageDate = JSON.parse(
+        const storageData = JSON.parse(
           localStorage.getItem("userRegistration")
         );
-        console.log(userExist(storageDate, username, "username"));
-        console.log(userExist(storageDate, email, "email"));
-        if (userExist(storageDate, username, "username"))
+        if (userExist(storageData, username, "username"))
           alert("This username is not available!\nPlease try another one!");
-        else if (userExist(storageDate, email, "email"))
+        else if (userExist(storageData, email, "email"))
           alert(
             "This email is already registered!\nPlease Login in your account!"
           );
         else {
           const userArr = [];
-          for (let i of storageDate) {
+          for (let i of storageData) {
             userArr.push(i);
           }
           userArr.push(inpVal);
